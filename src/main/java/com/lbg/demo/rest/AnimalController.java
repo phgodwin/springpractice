@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,13 +43,13 @@ public class AnimalController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public Animal removeAnimal(@PathVariable int id) {
+	public boolean removeAnimal(@PathVariable int id) {
 		return this.service.removeAnimal(id);
 	}
 
-	@PutMapping("/update/{id}")
+	@PatchMapping("/update/{id}")
 
-	public Animal updateAnimal(@PathVariable int id, @RequestBody Animal newAnimal) {
+	public ResponseEntity<Animal> updateAnimal(@PathVariable int id, @RequestBody Animal newAnimal) {
 		return this.service.updateAnimal(id, newAnimal);
 
 	}

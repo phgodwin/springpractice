@@ -1,46 +1,76 @@
 package com.lbg.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.lbg.demo.domain.Animal;
+import com.lbg.demo.repos.AnimalRepo;
 
 @Service
 public class AnimalService {
 
-	private List<Animal> animals = new ArrayList<>();
+	private AnimalRepo repo;
+
+	public AnimalService(AnimalRepo repo) {
+		super();
+		this.repo = repo;
+	}
 
 	public ResponseEntity<Animal> createAnimal(Animal newAnimal) {
-
-		this.animals.add(newAnimal);
-		Animal body = this.animals.get(this.animals.size() - 1);
-
-		return new ResponseEntity<Animal>(body, HttpStatus.CREATED);
+		Animal created = this.repo.save(newAnimal);
+		return new ResponseEntity<Animal>(created, HttpStatus.CREATED);
 	}
 
 	public List<Animal> getAnimals() {
-		return animals;
+		return this.repo.findAll();
+
 	}
 
 	public ResponseEntity<Animal> getAnimal(int id) {
-		if (id < 0 || id >= this.animals.size()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		Optional<Animal> found = this.repo.findById(id);
+
+		if (found.isEmpty()) {
+			return new ResponseEntity<Animal>(HttpStatus.NOT_FOUND);
 		}
-		Animal found = this.animals.get(id);
 
-		return ResponseEntity.ok(found);
+		Animal body = found.get();
+
+		return ResponseEntity.ok(body);
+
 	}
 
-	public Animal removeAnimal(int id) {
-		return this.animals.remove(id);
+	public boolean removeAnimal(int id) {
+		this.repo.deleteById(id);
+
+		return !this.repo.existsById(id);
+
 	}
 
-	public Animal updateAnimal(int id, Animal newAnimal) {
-		return this.animals.set(id, newAnimal);
+	public ResponseEntity<Animal> updateAnimal(int id, Animal newAnimal) {
+
+		Optional<Animal> found = this.repo.findById(id);
+
+		if (found.isEmpty()) {
+			return new ResponseEntity<Animal>(HttpStatus.NOT_FOUND);
+		}
+
+		Animal existing = found.get();
+
+		if (newAnimal.getType() != null) {
+			existing.setType(newAnimal.getType());
+		}
+
+		if (newAnimal.getColour() != null) {
+			existing.setColour(newAnimal.getColour());
+		}
+
+		Animal updated = this.repo.save(existing);
+
+		return ResponseEntity.ok(updated);
 
 	}
 

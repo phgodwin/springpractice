@@ -16,16 +16,16 @@ public class Animal {
 
 	String colour;
 
+	public Animal() {
+		super();
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Animal() {
-		super();
 	}
 
 	public String getType() {
