@@ -12,48 +12,49 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lbg.demo.domain.Animal;
-import com.lbg.demo.service.AnimalService;
+import com.lbg.demo.domain.Owner;
+import com.lbg.demo.service.OwnerService;
 
 @RestController
-@RequestMapping("/animal")
+@RequestMapping("/owner")
+public class OwnerController {
 
-public class AnimalController {
+	private OwnerService service;
 
-	private AnimalService service;
-
-	public AnimalController(AnimalService service) {
+	public OwnerController(OwnerService service) {
 		super();
 		this.service = service;
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<Animal> createAnimal(@RequestBody Animal newAnimal) {
-
-		return this.service.createAnimal(newAnimal);
+	public ResponseEntity<Owner> createOwner(@RequestBody Owner newOwner) {
+		return this.service.createOwner(newOwner);
 	}
 
 	@GetMapping("/get")
-	public List<Animal> getAnimals() {
-		return this.service.getAnimals();
+	public List<Owner> getOwners() {
+		return this.service.getOwners();
 	}
 
 	@GetMapping("/get/{id}")
-	public ResponseEntity<Animal> getAnimal(@PathVariable int id) {
 
-		return this.service.getAnimal(id);
+	public ResponseEntity<Owner> getOwner(@PathVariable int id) {
+
+		return this.service.getOwner(id);
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public boolean removeAnimal(@PathVariable int id) {
-		return this.service.removeAnimal(id);
+
+	public boolean removeOwner(@PathVariable int id) {
+		return this.service.removeOwner(id);
+
 	}
 
 	@PatchMapping("/update/{id}")
 
-	public ResponseEntity<Animal> updateAnimal(@PathVariable int id, @RequestBody Animal newAnimal) {
-		return this.service.updateAnimal(id, newAnimal);
+	public ResponseEntity<Owner> updateOwner(@PathVariable int id, @RequestBody Owner newOwner) {
 
+		return this.service.updateOwner(id, newOwner);
 	}
 
 }
